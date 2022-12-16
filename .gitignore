@@ -82,6 +82,7 @@ typings/
 .nuxt
 dist
 .idea
+.DS_Store
 
 # Gatsby files
 .cache/
