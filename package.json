@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "npx nodemon",
     "build": "rimraf ./dist && npx tsc",
-    "start": "npm run build && node dist/index",
     "lint": "npx eslint ./src",
-    "lint:fix": "npx eslint ./src --fix"
+    "lint:fix": "npx eslint ./src --fix",
+    "task1": "npm run build && npx nodemon ./dist/task1.js"
   },
   "type": "module",
   "repository": {
