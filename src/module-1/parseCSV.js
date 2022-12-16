@@ -2,7 +2,7 @@ import fs from 'fs';
 import { pipeline } from 'stream';
 import csv from 'csvtojson';
 
-export function parseCSV(): void {
+export function parseCSV() {
   const PATH_TO_CSV_FILE = 'csv/file.csv';
   const PATH_TO_OUTPUT_FILE = 'csv/file.txt';
 

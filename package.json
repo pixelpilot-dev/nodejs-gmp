@@ -6,10 +6,15 @@
   "scripts": {
     "dev": "npx nodemon",
     "build": "rimraf ./dist && npx tsc",
-    "lint": "npx eslint ./src",
-    "lint:fix": "npx eslint ./src --fix",
-    "task1": "npm run build && npx nodemon ./dist/task1.js",
-    "task2": "npm run build && npx nodemon ./dist/task2.js"
+    "start": "npm run build && node dist/index",
+    "eslint": "npx eslint ./src",
+    "eslint:fix": "npm run eslint -- --fix",
+    "format": "prettier --check './src/**/*.{ts,js,json,md}'",
+    "format:fix": "prettier --write './src/**/*.{ts,js,json,md}'",
+    "lint": "npm run format && npm run eslint",
+    "lint:fix": "npm run format:fix && npm rum eslint:fix",
+    "task1": "nodemon --exec babel-node src/task1",
+    "task2": "nodemon --exec babel-node src/task2"
   },
   "type": "module",
   "repository": {
@@ -24,6 +29,10 @@
   },
   "homepage": "https://github.com/vkozhevnikova/nodejs-gmp#readme",
   "devDependencies": {
+    "@babel/cli": "^7.19.3",
+    "@babel/core": "^7.20.5",
+    "@babel/node": "^7.20.5",
+    "@babel/preset-env": "^7.20.2",
     "@types/node": "^18.11.15",
     "@typescript-eslint/eslint-plugin": "^5.46.1",
     "@typescript-eslint/parser": "^5.46.1",

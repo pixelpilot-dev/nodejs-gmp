@@ -4,7 +4,7 @@ const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
-export function reverseStr(): void {
+export function reverseStr() {
   rl.setPrompt(`Give me a word, I'll reverse it \n`);
 
   rl.prompt();
