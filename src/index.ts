@@ -1,3 +1,6 @@
-import { test } from './modules/test.js';
+import { app } from './app.js';
+import { PORT } from './core/constants.js';
 
-test('Test TypeScript');
+app.listen(PORT, () => {
+  console.log(`Server is listening on http://localhost:${PORT}`);
+});
