@@ -1,3 +1,3 @@
-import { TUser } from '../../models/users.js';
+import { IUserCreate } from '../types/user.js';
 
-export const USERS = new Map<string, TUser>();
+export const USERS = new Map<string, IUserCreate>();

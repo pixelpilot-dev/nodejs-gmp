@@ -1,11 +1,11 @@
 export class CustomError {
   message!: string;
   status!: number;
-  data!: unknown;
+  stack!: unknown;
 
-  constructor(message: string, status = 500, data: unknown = {}) {
+  constructor(message: string, status = 500, stack: unknown = {}) {
     this.message = message;
     this.status = status;
-    this.data = data;
+    this.stack = stack;
   }
 }
