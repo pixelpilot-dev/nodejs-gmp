@@ -1,0 +1,16 @@
+{
+  "development": {
+    "username": "pczxdksu",
+    "password": "C4D9e7YALTxqDyc8bqPah0aNdj97hyjR",
+    "database": "pczxdksu",
+    "host": "salt.db.elephantsql.com",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "pczxdksu",
+    "password": "C4D9e7YALTxqDyc8bqPah0aNdj97hyjR",
+    "database": "pczxdksu",
+    "host": "salt.db.elephantsql.com",
+    "dialect": "postgres"
+  }
+}

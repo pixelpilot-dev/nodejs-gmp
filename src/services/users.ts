@@ -1,99 +1,60 @@
-import { v4 as uuidv4 } from 'uuid';
-import { USERS } from '../core/mocks/users.js';
-import { TUser } from '../models/users.js';
-import { CustomError } from '../models/CustomError.js';
-import { HTTP_STATUS } from '../core/constants.js';
+import User from '../models/users.js';
+import { Op } from 'sequelize';
 
-const isAvailableUser = (user: TUser) => !user.isDeleted;
-const isUserNotFound = (user: TUser | undefined) => !user || user.isDeleted;
-
-const getAvailableUsers = () => {
-  return [...USERS.values()].filter(isAvailableUser);
-};
-
-const getAll = () => {
-  return [...USERS.values()];
-};
-
-const getById = (id: string) => {
-  const user = USERS.get(id);
-
-  if (isUserNotFound(user)) {
-    throw new CustomError('User not found', HTTP_STATUS.NOT_FOUND);
+export default class UserService {
+  static getAll(): Promise<User[]> {
+    return User.findAll();
   }
 
-  return user;
-};
-
-const create = (data: TUser) => {
-  const id = uuidv4();
-  const { age, login, password } = data;
-
-  const user: TUser = {
-    id,
-    age,
-    login,
-    password,
-    isDeleted: false,
-  };
-
-  USERS.set(id, user);
-  return user;
-};
-
-const removeById = (id: string) => {
-  const user = USERS.get(id) as TUser;
-
-  if (isUserNotFound(user)) {
-    throw new CustomError('User not found', HTTP_STATUS.NOT_FOUND);
+  static getById(id: string): Promise<User | null> {
+    return User.findByPk(id);
   }
 
-  USERS.set(user.id, {
-    ...user,
-    isDeleted: true,
-  });
-
-  return { message: 'User has been deleted' };
-};
-
-const updateById = (userId: string, data: TUser) => {
-  const user = USERS.get(userId) as TUser;
-
-  if (isUserNotFound(user)) {
-    throw new CustomError('User not found', HTTP_STATUS.NOT_FOUND);
+  static getAutoSuggest(login: string, limit: number): Promise<User[]> {
+    return User.findAll({
+      where: {
+        login: {
+          [Op.substring]: login,
+        },
+      },
+      limit,
+    });
   }
 
-  const { id, isDeleted } = user;
-  const { age, login, password } = data;
-  const updatedUser: TUser = {
-    id,
-    isDeleted,
-    age: age ?? user.age,
-    login: login ?? user.login,
-    password: password ?? user.password,
-  };
+  static create({ age, login, password }: User): Promise<User> {
+    return User.create({
+      age,
+      login,
+      password,
+    });
+  }
 
-  USERS.set(id, updatedUser);
+  static removeById(id: string) {
+    return User.destroy({
+      where: {
+        id,
+      },
+    });
+  }
 
-  return updatedUser;
-};
+  static async update(
+    id: string,
+    { login, password, age }: User,
+  ): Promise<[User, boolean | null] | null> {
+    const user = await UserService.getById(id);
 
-const getAutoSuggestUsers = (loginSubstr: string, limit: number): TUser[] => {
-  const users = [...USERS.values()];
+    if (!user) {
+      return null;
+    }
 
-  return users
-    .filter(isAvailableUser)
-    .filter(({ login }) => login.includes(loginSubstr))
-    .slice(0, limit)
-    .sort(({ login: a }, { login: b }) => a.localeCompare(b));
-};
-
-export {
-  getAvailableUsers,
-  getAll,
-  getById,
-  create,
-  removeById,
-  updateById,
-  getAutoSuggestUsers,
-};
+    return User.upsert(
+      {
+        id,
+        age: age ?? user.age,
+        login: login ?? user.login,
+        password: password ?? user.password,
+      },
+      { returning: true },
+    );
+  }
+}
